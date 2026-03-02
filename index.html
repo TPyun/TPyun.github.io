@@ -31,6 +31,7 @@
     html,body{height:100%}
     body{
       margin:0;
+      min-height:100vh;
       font-family: var(--font-body);
       color:var(--text);
       background:
@@ -38,6 +39,8 @@
         radial-gradient(800px 650px at 85% 18%, rgba(34,211,238,.20), transparent 55%),
         radial-gradient(900px 700px at 60% 95%, rgba(249,115,22,.14), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+      background-attachment: fixed, fixed, fixed, fixed;
       overflow-x:hidden;
     }
 
@@ -66,6 +69,15 @@
       overflow:hidden;
       pointer-events:none;
       z-index:-1;
+    }
+    .particleLayer{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.85;
     }
     .orb{
       position:absolute;
@@ -293,7 +305,6 @@
       font-size:12px;
       display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
       padding-top:18px;
-      border-top:1px solid rgba(255,255,255,.07);
     }
 
     .reveal{opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease}
@@ -302,6 +313,7 @@
 </head>
 
 <body>
+  <canvas id="particleLayer" class="particleLayer" aria-hidden="true"></canvas>
   <div class="bgOrbs" aria-hidden="true">
     <div class="orb o1"></div>
     <div class="orb o2"></div>
@@ -498,6 +510,139 @@
         card.style.setProperty("--sy", `${y}%`);
       });
     });
+
+    const canvas = document.getElementById("particleLayer");
+    const ctx = canvas.getContext("2d", { alpha: true });
+    const particles = [];
+    const pulses = [];
+    const mouse = { x: 0, y: 0, active: false };
+    let lastPulseAt = 0;
+    const cfg = {
+      maxDpr: 2,
+      density: 18000,
+      maxParticles: 90,
+      minParticles: 36,
+      linkDist: 120,
+      mouseRadius: 180,
+      pulseInterval: 2048,
+      pulseSpeed: 1.6,
+      pulseMaxRadius: 190
+    };
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, cfg.maxDpr);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const targetCount = Math.max(
+        cfg.minParticles,
+        Math.min(cfg.maxParticles, Math.floor((w * h) / cfg.density))
+      );
+      while (particles.length < targetCount) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.55,
+          vy: (Math.random() - 0.5) * 0.55,
+          r: Math.random() * 1.4 + 0.8,
+          a: Math.random() * 0.28 + 0.14
+        });
+      }
+      particles.length = targetCount;
+    }
+
+    function stepParticles(ts = 0) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      if (mouse.active && ts - lastPulseAt > cfg.pulseInterval) {
+        pulses.push({ x: mouse.x, y: mouse.y, r: 8, a: 0.34 });
+        lastPulseAt = ts;
+      }
+
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const pulse = pulses[i];
+        pulse.r += cfg.pulseSpeed;
+        pulse.a *= 0.975;
+        if (pulse.r > cfg.pulseMaxRadius || pulse.a < 0.01) {
+          pulses.splice(i, 1);
+          continue;
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(88, 212, 255, ${pulse.a})`;
+        ctx.lineWidth = 1.4;
+        ctx.arc(pulse.x, pulse.y, pulse.r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (mouse.active) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const d = Math.hypot(dx, dy);
+          if (d > 0 && d < cfg.mouseRadius) {
+            const t = (1 - d / cfg.mouseRadius) * 0.03;
+            p.vx += (dx / d) * t;
+            p.vy += (dy / d) * t;
+          }
+        }
+
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < -20) p.x = w + 20;
+        if (p.x > w + 20) p.x = -20;
+        if (p.y < -20) p.y = h + 20;
+        if (p.y > h + 20) p.y = -20;
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(180, 226, 255, ${p.a})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d = Math.hypot(dx, dy);
+          if (d < cfg.linkDist) {
+            const alpha = (1 - d / cfg.linkDist) * 0.18;
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(120, 190, 255, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(stepParticles);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    }, { passive: true });
+    window.addEventListener("mouseleave", () => {
+      mouse.active = false;
+    });
+
+    resizeCanvas();
+    stepParticles();
 
   </script>
 </body>
