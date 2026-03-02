@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yun Wooyung — Portfolio</title>
+  <meta name="description" content="Research & Engineering Portfolio" />
+  <meta property="og:title" content="Yun Wooyung — Portfolio" />
+  <meta property="og:description" content="Research & Engineering Portfolio" />
+  <meta property="og:type" content="website" />
+  <meta name="google-site-verification" content="fZybZSAAjDCbAhlVLRySWswOYd7n8oZVCfI4xm-sB_A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1022;
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --muted2: rgba(255,255,255,.45);
+      --accent1:#7C3AED;
+      --accent2:#22D3EE;
+      --shadow: 0 20px 70px rgba(0,0,0,.55);
+      --radius: 18px;
+      --font-body: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+      --font-display: "Space Grotesk", "Plus Jakarta Sans", sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--font-body);
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 15% 10%, rgba(124,58,237,.22), transparent 60%),
+        radial-gradient(800px 650px at 85% 18%, rgba(34,211,238,.20), transparent 55%),
+        radial-gradient(900px 700px at 60% 95%, rgba(249,115,22,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      opacity:.06;
+      pointer-events:none;
+      mix-blend-mode:overlay;
+      z-index:-2;
+    }
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      background: linear-gradient(180deg, rgba(7,10,18,.02), rgba(7,10,18,.45));
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:1120px; margin:0 auto; padding:28px 18px 80px}
+    .bgOrbs{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+      z-index:-1;
+    }
+    .orb{
+      position:absolute;
+      border-radius:999px;
+      filter: blur(50px);
+      opacity:.26;
+      will-change: transform;
+      animation: drift 18s ease-in-out infinite;
+    }
+    .orb.o1{
+      width:320px; height:320px;
+      left:-80px; top:8%;
+      background: radial-gradient(circle at 35% 35%, rgba(124,58,237,.78), rgba(124,58,237,.02) 70%);
+    }
+    .orb.o2{
+      width:300px; height:300px;
+      right:-60px; top:18%;
+      background: radial-gradient(circle at 40% 40%, rgba(34,211,238,.72), rgba(34,211,238,.02) 70%);
+      animation-delay: -6s;
+    }
+    .orb.o3{
+      width:360px; height:360px;
+      left:35%; bottom:-160px;
+      background: radial-gradient(circle at 40% 40%, rgba(249,115,22,.45), rgba(249,115,22,.03) 72%);
+      animation-delay: -11s;
+    }
+    @keyframes drift{
+      0%,100%{transform: translate3d(0,0,0) scale(1)}
+      50%{transform: translate3d(0,-20px,0) scale(1.05)}
+    }
+
+    .hero{
+      padding:0 0 22px;
+    }
+    .card{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      --sx: 50%;
+      --sy: 50%;
+      --ga: 0;
+    }
+    .card:hover{--ga:.16}
+    .card::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(280px circle at var(--sx) var(--sy), rgba(255,255,255,var(--ga)), rgba(255,255,255,0) 62%),
+                  radial-gradient(800px 220px at 15% 0%, rgba(124,58,237,.18), transparent 55%),
+                  radial-gradient(600px 240px at 80% 10%, rgba(34,211,238,.15), transparent 55%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .card > *{position:relative; z-index:1}
+    .heroMain{padding:26px 26px 24px}
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+    h1{
+      margin:12px 0 10px;
+      font-size: clamp(34px, 4.3vw, 58px);
+      line-height:1.02;
+      letter-spacing:-.8px;
+      font-family:var(--font-display);
+    }
+    .nameRow{
+      display:flex;
+      align-items:baseline;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .idRow{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:6px;
+    }
+    .avatar{
+      width:100px;
+      height:128px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      flex: 0 0 auto;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .degree{
+      font-size:14px;
+      color:var(--muted);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    .grad{
+      background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,255,255,.75) 35%, rgba(34,211,238,.95));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .sub{
+      margin:0;
+      font-size:16px;
+      line-height:1.55;
+      color:var(--muted);
+      max-width: 62ch;
+    }
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color:rgba(255,255,255,.92);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      font-size:14px;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.20)}
+    .metaGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:18px;
+    }
+    @media (max-width: 560px){ .metaGrid{grid-template-columns:1fr} }
+    .mini{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .mini b{display:block; font-size:13px}
+    .mini span{display:block; margin-top:4px; color:var(--muted); font-size:13px; line-height:1.35}
+
+    .section{margin-top:26px}
+    .sectionHead{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .sectionHead h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+      color:rgba(255,255,255,.92);
+      font-family:var(--font-display);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:12px;
+    }
+    .proj{
+      grid-column: span 6;
+      padding:16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+      --sx: 50%;
+      --sy: 50%;
+    }
+    .proj:hover{transform: translateY(-3px); border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.055)}
+    .proj::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(520px 180px at 25% 0%, rgba(124,58,237,.15), transparent 60%),
+                  radial-gradient(520px 180px at 90% 20%, rgba(34,211,238,.10), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .proj::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(240px circle at var(--sx) var(--sy), rgba(255,255,255,.19), rgba(255,255,255,0) 62%);
+      opacity:0;
+      transition: opacity .22s ease;
+      pointer-events:none;
+      z-index:0;
+    }
+    .proj:hover::after{opacity:.95}
+    .proj > *{position:relative; z-index:1}
+    .projTop{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+    .projTitle{margin:0; font-size:15px; letter-spacing:.2px}
+    .tagRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .tag{
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+    .proj p{margin:8px 0 0; color:var(--muted); font-size:13px; line-height:1.5}
+    .projActions{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+    .link{
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .link:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.18)}
+    @media (max-width: 980px){ .proj{grid-column: span 12} }
+
+    footer{
+      margin-top:28px;
+      color:var(--muted2);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.07);
+    }
+
+    .reveal{opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1; transform: translateY(0)}
+  </style>
+</head>
+
+<body>
+  <div class="bgOrbs" aria-hidden="true">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+  </div>
+  <div class="wrap">
+    <section class="hero">
+      <div class="sectionHead">
+        <h2>I am</h2>
+      </div>
+      <div class="card heroMain reveal">
+        <div class="heroMain">
+          <div class="idRow">
+            <div class="avatar">
+              <img src="assets/profile.jpg" alt="Yun Wooyung profile photo">
+            </div>
+            <div class="nameRow">
+              <h1>Yun <span class="grad">Wooyung</span></h1>
+              <span class="degree">M.S., Ajou University</span>
+            </div>
+          </div>
+
+          <p class="sub">
+            I build real-time depth estimation systems using radar and camera data.
+          </p>
+          <div class="ctaRow">
+            <a class="btn" href="https://scholar.google.com/citations?hl=ko&user=yhcJIvMAAAAJ" target="_blank" rel="noreferrer">Google Scholar ↗</a>
+            <a class="btn" href="https://github.com/TPyun" target="_blank" rel="noreferrer">GitHub ↗</a>
+            <a class="btn" href="mailto:woodolly17@gmail.com">woodolly17@gmail.com</a>
+          </div>
+
+          <div class="metaGrid">
+            <div class="mini">
+              <b>Now</b>
+              <span>Depth Estimation, Temporal Fusion, 4D Radar</span>
+            </div>
+            <div class="mini">
+              <b>Interested in</b>
+              <span>Depth Estimation, Sensor Fusion, Radar, Game Development</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="papers" class="section">
+      <div class="sectionHead">
+        <h2>Papers</h2>
+      </div>
+
+      <div class="grid">
+        <article class="proj reveal">
+          <div class="projTop">
+            <h3 class="projTitle">JustDepth: Real-Time Radar-Camera Depth Estimation With Single-Scan LiDAR Supervision.</h3>
+            <span class="badge">Paper</span>
+          </div>
+          <p>Real-time radar-camera depth estimation method that uses single-scan LiDAR supervision.</p>
+          <div class="tagRow">
+            <span class="tag">IEEE RA-L 2026</span>
+            <span class="tag">PyTorch</span>
+            <span class="tag">Sensor Fusion</span>
+            <span class="tag">Depth Estimation</span>
+          </div>
+          <div class="projActions">
+            <a class="link" href="https://github.com/TPyun/JustDepth" target="_blank" rel="noreferrer">Code ↗</a>
+            <a class="link" href="https://ieeexplore.ieee.org/abstract/document/11358657" target="_blank" rel="noreferrer">Paper ↗</a>
+            <a class="link" href="https://youtu.be/EURdRO6OfS0" target="_blank" rel="noreferrer">Video ↗</a>
+          </div>
+        </article>
+
+        <article class="proj reveal">
+          <div class="projTop">
+            <h3 class="projTitle">Efficient Deep Learning Approaches for Processing Ultra-widefield Retinal Imaging</h3>
+            <span class="badge">Paper</span>
+          </div>
+          <p>Efficient deep learning methods for analyzing ultra-widefield retinal images in diabetic retinopathy diagnosis.</p>
+          <div class="tagRow">
+            <span class="tag">MICCAI Challenge 2024</span>
+            <span class="tag">Diabetic Retinopathy</span>
+          </div>
+          <div class="projActions">
+            <a class="link" href="https://link.springer.com/chapter/10.1007/978-3-031-89388-9_13" target="_blank" rel="noreferrer">Paper ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="sectionHead">
+        <h2>Projects</h2>
+      </div>
+
+      <div class="grid">
+        <article class="proj reveal">
+          <div class="projTop">
+            <h3 class="projTitle">IOCP MMORPG Game</h3>
+            <span class="badge">Project</span>
+          </div>
+          <p>IOCP-based MMORPG server and game implementation.</p>
+          <div class="tagRow">
+            <span class="tag">C++</span>
+            <span class="tag">IOCP</span>
+            <span class="tag">MMORPG</span>
+            <span class="tag">Server</span>
+          </div>
+          <div class="projActions">
+            <a class="link" href="https://github.com/TPyun/GameServerProgramming" target="_blank" rel="noreferrer">Code ↗</a>
+            <a class="link" href="https://youtu.be/VE64wZlzru4" target="_blank" rel="noreferrer">Video ↗</a>
+          </div>
+        </article>
+
+        <article class="proj reveal">
+          <div class="projTop">
+            <h3 class="projTitle">Survil</h3>
+            <span class="badge">Project</span>
+          </div>
+          <p>Survival multiplayer game in Unreal Engine.</p>
+          <div class="tagRow">
+            <span class="tag">Unreal Engine</span>
+            <span class="tag">Multiplayer</span>
+            <span class="tag">Survival</span>
+            <span class="tag">Game Dev</span>
+          </div>
+          <div class="projActions">
+            <a class="link" href="https://github.com/TPyun/Univ_Project" target="_blank" rel="noreferrer">Code ↗</a>
+            <a class="link" href="https://youtu.be/v5jh6FqcvPU" target="_blank" rel="noreferrer">Video ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="experience" class="section">
+      <div class="sectionHead">
+        <h2>Experience</h2>
+      </div>
+
+      <div class="grid">
+        <article class="proj reveal" style="grid-column: span 12;">
+          <div class="projTop">
+            <h3 class="projTitle">M.S. Research</h3>
+            <span class="badge">RISE Lab · Ajou University</span>
+          </div>
+          <p>Completed my master's degree while conducting computer vision and deep learning research at RISE Lab.</p>
+          <div class="projActions">
+            <a class="link" href="https://sites.google.com/site/cvsmlee/home" target="_blank" rel="noreferrer">Lab Website ↗</a>
+          </div>
+        </article>
+
+        <article class="proj reveal" style="grid-column: span 12;">
+          <div class="projTop">
+            <h3 class="projTitle">Computer Vision Teaching</h3>
+            <span class="badge">Ajou University</span>
+          </div>
+          <p>Taught computer vision-related classes for university students.</p>
+          <div class="tagRow">
+            <span class="tag">Image Generation</span>
+            <span class="tag">Image Segmentation</span>
+            <span class="tag">Depth Estimation</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="y"></span> Yun Wooyung</span>
+      <span>Built for GitHub Pages · No framework</span>
+    </footer>
+  </div>
+
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          en.target.classList.add("show");
+          io.unobserve(en.target);
+        }
+      });
+    }, {threshold: .12});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+    document.querySelectorAll(".proj, .card").forEach(card=>{
+      card.addEventListener("mousemove", (e)=>{
+        const r = card.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        card.style.setProperty("--sx", `${x}%`);
+        card.style.setProperty("--sy", `${y}%`);
+      });
+    });
+
+  </script>
+</body>
+</html>
